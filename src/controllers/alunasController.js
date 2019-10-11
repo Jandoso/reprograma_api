@@ -29,3 +29,30 @@ exports.getSp = (req, res) => {
    const nomesPaulistas = nascidasSp.map(paulista => paulista.nome)
    res.status(200).send(nomesPaulistas)
 }
+
+function calcularIdade(anoDeNasc, mesDeNasc, diaDeNasc) {
+      const now = new Date()
+      const anoAtual = now.getFullYear()
+      const mesAtual = now.getMonth() + 1
+      const hoje = now.getDate()
+    
+      let idade = anoAtual - anoDeNasc
+    
+      if (mesAtual < mesDeNasc || (mesAtual == mesDeNasc && hoje < diaDeNasc)) {
+        idade -= 1
+      }
+      return idade
+    }
+    
+
+exports.getIdade = (req, res) => {
+    const id = req.params.id
+    const aluna = alunas.find(aluna => aluna.id == id)
+    const nascimento = aluna.dateOfBirth
+    const dataDeNascimento = nascimento.split("/")
+    const idade = calcularIdade(dataDeNascimento[2], dataDeNascimento[1], dataDeNascimento[0])
+    res.status(200).send(`A aluna tem ${idade} anos`)
+}
+
+
+    
